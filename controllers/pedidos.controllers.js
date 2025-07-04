@@ -22,3 +22,8 @@ export async function obtenerPedidosDeUsuario(req, res){
 async function addServicioAPedido(i, num){
     const result = await pool.query("INSERT INTO SERVICIO_PEDIDO(id_pedido, id_servicio) VALUES($1, $2)", [i, num]);
 }
+
+export async function obtenerTodos(req, res){
+    const result = await pool.query("SELECT * FROM pedidos_completos");
+    res.json(result.rows);
+}
