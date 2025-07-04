@@ -6,6 +6,7 @@ import auth from "./routes/auth.routes.js";
 import clientes from "./routes/clientes.routes.js";
 import payload from "./middlewares/auth.js";
 import { accesoRestringido } from "./middlewares/admin.js";
+import path from "node:path";
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(express.static("public"));
+
 
 app.use("/servicios", servicios);
 app.use("/pedidos", payload, pedidos);
