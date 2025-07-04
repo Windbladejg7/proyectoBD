@@ -8,6 +8,7 @@ dotenv.config();
 export async function register(req, res){
     const {nombres, apellidos, fecha_nacimiento, genero, email, password} = req.body;
     const existente = await pool.query("SELECT * FROM CLIENTE WHERE email=$1", [email]);
+    //
     if(existente.rows.length>0){
         return res.status(404).json({error: "Usuario ya existe"});
     }

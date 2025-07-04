@@ -5,7 +5,7 @@ import pedidos from "./routes/pedidos.routes.js";
 import auth from "./routes/auth.routes.js";
 import clientes from "./routes/clientes.routes.js";
 import payload from "./middlewares/auth.js";
-
+import { accesoRestringido } from "./middlewares/admin.js";
 
 dotenv.config();
 
@@ -17,6 +17,6 @@ app.use(express.json());
 app.use("/servicios", servicios);
 app.use("/pedidos", payload, pedidos);
 app.use("/auth", auth);
-app.use("/clientes", clientes);
+app.use("/clientes", payload, accesoRestringido, clientes);
 
 app.listen(PORT, ()=>console.log(`Escuchando en el puerto ${PORT}`));
