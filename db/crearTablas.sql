@@ -34,7 +34,20 @@ CREATE TABLE SERVICIO_PEDIDO(
     CONSTRAINT pk_servicio_pedido PRIMARY KEY(id_pedido, id_servicio)
 );
 
+ALTER TABLE PEDIDO
+ALTER COLUMN estado TYPE INT;
 
+ALTER TABLE PEDIDO
+ADD CONSTRAINT fk_estado FOREIGN KEY(estado) REFERENCES ESTADO(id_estado);
+
+CREATE TABLE ESTADO(
+    id_estado SERIAL PRIMARY KEY,
+    nombre TEXT CHECK(nombre IN ('pendiente', 'completado'))
+);
+
+
+ALTER TABLE PEDIDO
+ADD COLUMN fecha_entrega DATE DEFAULT CURRENT_DATE + INTERVAL'5 days';
 
 INSERT INTO CLIENTE(nombres, apellidos, fecha_nacimiento, genero, email, password)
 VALUES ('Edison Julian', 'Garzon Alvarez', '26-12-2005', 'M', 'juliangarzon@gmail.com', '12345');
@@ -60,8 +73,21 @@ SELECT * FROM PEDIDO;
 SELECT * FROM SERVICIO_PEDIDO;
 
 
-SELECT p.id_pedido, p.fecha_creacion, p.estado, c.nombres ||' '|| c.apellidos as cliente, s.nombre, s.descripcion, s.precio 
+
+CREATE VIEW pedidos_completos AS
+SELECT 
+  p.id_pedido,
+  p.id_cliente,
+  c.nombres || ' ' || c.apellidos AS cliente,
+  TO_CHAR(p.fecha_creacion, 'YYYY-MM-DD') AS fecha_creacion,
+  TO_CHAR(p.fecha_entrega, 'YYYY-MM-DD') AS fecha_entrega,
+  e.nombre AS estado,
+  SUM(s.precio) AS costo,
+  JSON_AGG(s.nombre) AS servicios
 FROM PEDIDO p 
-INNER JOIN SERVICIO_PEDIDO ps ON p.id_pedido = ps.id_pedido 
-INNER JOIN SERVICIO s ON s.id_servicio = ps.id_servicio 
-INNER JOIN CLIENTE c ON p.id_cliente = c.id_cliente;
+INNER JOIN SERVICIO_PEDIDO ps ON ps.id_pedido = p.id_pedido
+INNER JOIN SERVICIO s ON s.id_servicio = ps.id_servicio
+INNER JOIN CLIENTE c ON c.id_cliente = p.id_cliente
+INNER JOIN ESTADO e ON e.id_estado = p.estado
+GROUP BY p.id_pedido, c.nombres, c.apellidos, p.fecha_creacion, p.fecha_entrega, e.nombre
+ORDER BY p.id_pedido;

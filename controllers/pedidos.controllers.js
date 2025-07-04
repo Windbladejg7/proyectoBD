@@ -5,7 +5,7 @@ export async function agregarPedido(req, res){
     console.log(req.usuario);
     const {servicios} = req.body;
     console.log(servicios);
-    const result = await pool.query("INSERT INTO PEDIDO(estado, id_cliente) VALUES($1, $2) RETURNING id_pedido", ["pendiente", id_cliente]);
+    const result = await pool.query("INSERT INTO PEDIDO(estado, id_cliente) VALUES($1, $2) RETURNING id_pedido", [1, id_cliente]);
     const i = result.rows[0].id_pedido;
     servicios.forEach((num)=>{
         addServicioAPedido(i, num);
@@ -15,7 +15,7 @@ export async function agregarPedido(req, res){
 
 export async function obtenerPedidosDeUsuario(req, res){
     const id_cliente = req.usuario.id;
-    const result = await pool.query("SELECT * FROM PEDIDO WHERE id_cliente=$1", [id_cliente]);
+    const result = await pool.query("SELECT * FROM pedidos_completos WHERE id_cliente=$1", [id_cliente]);
     res.json(result.rows);
 }
 
