@@ -5,8 +5,14 @@ import pedidos from "./routes/pedidos.routes.js";
 import auth from "./routes/auth.routes.js";
 import clientes from "./routes/clientes.routes.js";
 import payload from "./middlewares/auth.js";
-import { accesoRestringido } from "./middlewares/admin.js";
+
 import path from "node:path";
+import { accesoRestringido } from "./middlewares/admin.js";
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -14,8 +20,20 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public"))); // servir carpeta public
 
+// ✅ Ruta corregida
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+app.get("/pedidos", (req, res)=>{
+    res.sendFile(path.join(__dirname, "public", "pedidos.html"));
+});
+
+app.get("/adminlogin", (req, res)=>{
+    res.sendFile(path.join(__dirname, "public", "adminLogin.html"));
+});
 
 app.use("/servicios", servicios);
 app.use("/pedidos", payload, pedidos);
