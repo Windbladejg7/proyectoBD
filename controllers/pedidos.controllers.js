@@ -2,19 +2,27 @@ import pool from "../db/db.js";
 
 export async function agregarPedido(req, res){
     const id_cliente = req.usuario.id;
-    console.log(req.usuario);
+    
     const {servicios} = req.body;
-    console.log(servicios);
-    const result = await pool.query("INSERT INTO PEDIDO(estado, id_cliente) VALUES($1, $2) RETURNING id_pedido", [1, id_cliente]);
-    const i = result.rows[0].id_pedido;
-    servicios.forEach((num)=>{
-        addServicioAPedido(i, num);
-    });
-    res.sendStatus(200);
-}
 
-async function addServicioAPedido(i, num){
-    const result = await pool.query("INSERT INTO SERVICIO_PEDIDO(id_pedido, id_servicio) VALUES($1, $2)", [i, num]);
+    const client = await pool.connect();
+
+    try{
+        await client.query("BEGIN");
+        const result = await client.query("INSERT INTO PEDIDO(estado, id_cliente) VALUES($1, $2) RETURNING id_pedido", [1, id_cliente]); //Se puede mejorar cambiando estado usando DEFAULT
+        const id_pedido = result.rows[0].id_pedido;
+
+        for (let id_servicio of servicios){
+            await client.query("INSERT INTO SERVICIO_PEDIDO(id_pedido, id_servicio) VALUES($1, $2)", [id_pedido, id_servicio]);
+        }
+        await client.query("COMMIT");
+        res.status(200).json({mensaje:"Pedido creado exitosamente"});
+    }catch(error){
+        await client.query("ROLLBACK");
+        res.status(500).json({ error: "Error al crear el pedido" });
+    }finally{
+        client.release();
+    }
 }
 
 export async function obtenerPedidosDeUsuario(req, res){
