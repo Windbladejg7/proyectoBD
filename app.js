@@ -27,12 +27,20 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-app.get("/pedidos", (req, res)=>{
+app.get("/register", (req, res)=>{
+  res.sendFile(path.join(__dirname, "public", "register.html"));
+})
+
+app.get("/verPedidos", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "pedidos.html"));
 });
 
 app.get("/adminlogin", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "adminLogin.html"));
+});
+
+app.get("/misPedidos", (req, res)=>{
+    res.sendFile(path.join(__dirname, "public", "Mis pedidos.html"));
 });
 
 app.use("/servicios", servicios);
