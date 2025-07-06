@@ -4,7 +4,7 @@ const btnIngresar = document.getElementById("btnIngresar");
 const mensaje = document.getElementById("mensaje");
 
 btnIngresar.addEventListener("click", async () => {
-    const response = await fetch("http://localhost:3000/auth/login", {
+    const response = await fetch("/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -8,7 +8,7 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f4f8fb;
   color: #333;
-  padding: 2rem;
+  /*padding: 2rem;*/
 }
 
 
@@ -73,4 +73,39 @@ tr.descripcion td {
 
 #btnEnviar:hover {
   background-color: #4169e1;
+}
+
+nav {
+  background-color: #4a90e2; /* Azul moderno */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end; /* Alinea a la derecha */
+  align-items: center;
+  color: white;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#username {
+  font-size: 16px;
+  border-left:1px solid white ;
+}
+
+nav ul{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+nav ul li{
+  padding: 5px 20px;
+  list-style: none;
+  font-weight: bold;
+}
+
+a {
+  color:white;
+  text-decoration: none;
+  cursor: pointer;
 }

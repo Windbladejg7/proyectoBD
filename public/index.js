@@ -1,21 +1,39 @@
 const tabla = document.getElementById("tabla-servicios");
 const btnEnviar = document.getElementById("btnEnviar");
-
+const username = document.getElementById("username");
 const mensaje = document.getElementById("mensaje");
+const menu = document.getElementById("opciones");
 
+async function cargarInforUsuario() {
+    try {
+        const response = await fetch("/cliente", {
+            headers: {
+                "Authorization": localStorage.getItem("token")
+            }
+        });
 
-//Temporal: necesito guardar el token tras el login
-/*async function login() {
-    const post = await fetch('http://localhost:3000/auth/login', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email: "luisa@gmail.com", password: "Cristoteama" })
-    });
-    const loginResponse = post.json();
-    return loginResponse;
-}*/
+        if (!response.ok) {
+            username.textContent = "Iniciar Sesión";
+            username.parentNode.href = "/login";
+            return;
+        }
+        const optionMenu = document.createElement("a");
+        optionMenu.href = "/misPedidos";
+        const e = document.createElement("li")
+        e.textContent = "Mis pedidos";
+        optionMenu.appendChild(e);
+        menu.prepend(optionMenu);
+
+        const usuario = await response.json();
+        username.textContent = usuario.nombre;
+    } catch (error) {
+        console.error("Error al cargar la información del usuario:", error);
+        username.textContent = "Iniciar Sesión";
+        username.parentNode.href = "/login";
+    }
+}
+
+cargarInforUsuario();
 
 //Agregar pedido: funcional
 btnEnviar.addEventListener("click", async function () {
@@ -33,7 +51,7 @@ btnEnviar.addEventListener("click", async function () {
     }
 
     console.log(seleccionados);
-    const response = await fetch("http://localhost:3000/pedidos", {
+    const response = await fetch("/pedidos", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -46,12 +64,12 @@ btnEnviar.addEventListener("click", async function () {
         mensaje.textContent = "✅ Pedido creado exitosamente.";
         mensaje.style.color = "green";
         const checkBox = document.querySelectorAll(".checks");
-        checkBox.forEach((c)=>{
+        checkBox.forEach((c) => {
             c.checked = false;
         });
         const descripciones = document.querySelectorAll(".descripcion");
-        descripciones.forEach((d)=>d.remove());
-        setTimeout(()=>mensaje.textContent="", 2000);
+        descripciones.forEach((d) => d.remove());
+        setTimeout(() => mensaje.textContent = "", 2000);
     } else {
         mensaje.textContent = "❌ Hubo un error al crear el pedido.";
         mensaje.style.color = "red";
@@ -61,7 +79,7 @@ btnEnviar.addEventListener("click", async function () {
 
 //Para servicios
 async function servicios() {
-    const response = await fetch("http://localhost:3000/servicios");
+    const response = await fetch("/servicios");
     const datos = await response.json();
     imprimirServicios(datos);
 }

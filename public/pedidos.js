@@ -1,7 +1,7 @@
 const tabla = document.getElementById("pedidos");
 
 async function consultarPedidos() {
-    const response = await fetch("http://localhost:3000/pedidos/admin",{
+    const response = await fetch("/pedidos/admin",{
         headers:{
             "Authorization":localStorage.getItem("token")
         }
@@ -54,7 +54,7 @@ async function consultarPedidos() {
 
         cambiarEstado.addEventListener("change", async ()=>{
             console.log(cambiarEstado.value);
-            const response = await fetch(`http://localhost:3000/pedidos/${pedido.id_pedido}`, {
+            const response = await fetch(`/pedidos/${pedido.id_pedido}`, {
                 method:"PUT",
                 headers:{
                     "Content-Type":"application/json",

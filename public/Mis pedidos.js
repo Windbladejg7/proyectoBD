@@ -3,7 +3,7 @@ const mensaje = document.getElementById("mensaje");
 const sinPedidos = document.getElementById("sinPedidos");
 
 async function obtenerMisPedidos() {
-    const response = await fetch("http://localhost:3000/pedidos", {
+    const response = await fetch("/pedidos", {
         headers: {
             "Content-Type": "application/json",
             "Authorization": localStorage.getItem("token")
@@ -14,7 +14,7 @@ async function obtenerMisPedidos() {
 
     if (pedidos.length === 0) {
         sinPedidos.textContent = "No tienes pedidos aún. ";
-        sinPedidos.innerHTML+=`<a href="http://localhost:3000">Haz clic aquí para agregar uno.</a>`;
+        sinPedidos.innerHTML+=`<a href="/">Haz clic aquí para agregar uno.</a>`;
         return;
     } else {
         sinPedidos.textContent = ""; // Limpiar si había mensaje previo
@@ -38,7 +38,7 @@ async function obtenerMisPedidos() {
         cancelar.classList.add("cancelar-btn");
 
         cancelar.addEventListener("click", async () => {
-            const response = await fetch(`http://localhost:3000/pedidos/${pedido.id_pedido}`, {
+            const response = await fetch(`/pedidos/${pedido.id_pedido}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": localStorage.getItem("token")

@@ -46,6 +46,6 @@ app.get("/misPedidos", (req, res)=>{
 app.use("/servicios", servicios);
 app.use("/pedidos", payload, pedidos);
 app.use("/auth", auth);
-app.use("/clientes", payload, accesoRestringido, clientes);
+app.use("/cliente", payload, clientes);
 
 app.listen(PORT, ()=>console.log(`Escuchando en el puerto ${PORT}`));
