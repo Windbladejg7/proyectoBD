@@ -1,4 +1,4 @@
---Script para crear tablas en PostgreSQL
+--Script para crear tablas en PostgreSQL (Copiar y pegar en el psql)
 CREATE TABLE CLIENTE(
     id_cliente SERIAL,
     nombres TEXT NOT NULL,
