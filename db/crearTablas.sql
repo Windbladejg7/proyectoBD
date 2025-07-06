@@ -1,3 +1,4 @@
+--Script para crear tablas en PostgreSQL
 CREATE TABLE CLIENTE(
     id_cliente SERIAL,
     nombres TEXT NOT NULL,
@@ -12,19 +13,20 @@ CREATE TABLE CLIENTE(
 CREATE TABLE PEDIDO(
     id_pedido SERIAL PRIMARY KEY,
     fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE,
-    estado TEXT NOT NULL,
+    estado INT NOT NULL,
     id_cliente INT,
-    CONSTRAINT fk_cliente FOREIGN KEY(id_cliente) REFERENCES CLIENTE(id_cliente)
+    fecha_entrega DATE DEFAULT CURRENT_DATE + INTERVAL'5 days',
+    CONSTRAINT fk_cliente FOREIGN KEY(id_cliente) REFERENCES CLIENTE(id_cliente),
+    CONSTRAINT fk_estado FOREIGN KEY(estado) REFERENCES ESTADO(id_estado)
 );
 
 CREATE TABLE SERVICIO(
     id_servicio SERIAL,
     nombre TEXT NOT NULL,
     descripcion TEXT,
-    precio NUMERIC(5,2),
+    precio NUMERIC(5,2) NOT NULL,
     CONSTRAINT pk_servicio PRIMARY KEY(id_servicio)
 );
-
 
 CREATE TABLE SERVICIO_PEDIDO(
     id_pedido INT,
@@ -34,45 +36,20 @@ CREATE TABLE SERVICIO_PEDIDO(
     CONSTRAINT pk_servicio_pedido PRIMARY KEY(id_pedido, id_servicio)
 );
 
-ALTER TABLE PEDIDO
-ALTER COLUMN estado TYPE INT;
-
-ALTER TABLE PEDIDO
-ADD CONSTRAINT fk_estado FOREIGN KEY(estado) REFERENCES ESTADO(id_estado);
-
 CREATE TABLE ESTADO(
     id_estado SERIAL PRIMARY KEY,
     nombre TEXT CHECK(nombre IN ('pendiente', 'completado'))
 );
 
-
-ALTER TABLE PEDIDO
-ADD COLUMN fecha_entrega DATE DEFAULT CURRENT_DATE + INTERVAL'5 days';
-
-INSERT INTO CLIENTE(nombres, apellidos, fecha_nacimiento, genero, email, password)
-VALUES ('Edison Julian', 'Garzon Alvarez', '26-12-2005', 'M', 'juliangarzon@gmail.com', '12345');
-
-INSERT INTO PEDIDO(estado, id_cliente)
-VALUES ('pendiente', 1);
-
-ALTER TABLE SERVICIO
-ALTER COLUMN precio SET NOT NULL;
-
-INSERT INTO SERVICIO(nombre, descripcion, precio)
-VALUES('Lavado de zapatos', 'Lavado suave y desinfección de calzado deportivo', 3.50);
-
-INSERT INTO PEDIDO(estado, id_cliente)
-VALUES ('pendiente', 1)
-RETURNING id_pedido;
-
-
-DELETE FROM SERVICIO_PEDIDO WHERE id_pedido=;
-DELETE FROM PEDIDO WHERE id_pedido=;
-
-SELECT * FROM PEDIDO;
-SELECT * FROM SERVICIO_PEDIDO;
-
-
+CREATE TABLE EMPLEADO(
+    id_empleado SERIAL,
+    nombres TEXT NOT NULL,
+    apellidos TEXT NOT NULL,
+    genero VARCHAR(1) CHECK(genero IN ('M', 'F')) NOT NULL,
+    email TEXT UNIQUE  NOT NULL,
+    password TEXT NOT NULL,
+    CONSTRAINT pk_empleado PRIMARY KEY(id_empleado);
+);
 
 CREATE VIEW pedidos_completos AS
 SELECT 
