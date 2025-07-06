@@ -1,17 +1,22 @@
 const txtEmail = document.getElementById("txtEmail");
 const txtPassword = document.getElementById("txtPassword");
 const btnIngresar = document.getElementById("btnIngresar");
+const mensaje = document.getElementById("mensaje");
 
-btnIngresar.addEventListener("click", async ()=>{
+btnIngresar.addEventListener("click", async () => {
     const response = await fetch("http://localhost:3000/auth/login", {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
         },
-        body: JSON.stringify({email:txtEmail.value.trim(), password:txtPassword.value.trim()})
+        body: JSON.stringify({ email: txtEmail.value.trim(), password: txtPassword.value.trim() })
     });
-    const token = await response.json();
-    console.log(token);
-    localStorage.setItem("token", token.token);
-    console.log(localStorage.getItem("token"));
+    const data = await response.json();
+    if (response.ok) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "/";
+    } else {
+        mensaje.textContent = data.error;
+        mensaje.style.color = "red";
+    }
 });

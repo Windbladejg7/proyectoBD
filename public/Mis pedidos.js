@@ -1,5 +1,6 @@
 const tabla = document.getElementById("pedidos");
-
+const mensaje = document.getElementById("mensaje");
+const sinPedidos = document.getElementById("sinPedidos");
 
 async function obtenerMisPedidos() {
     const response = await fetch("http://localhost:3000/pedidos", {
@@ -11,7 +12,15 @@ async function obtenerMisPedidos() {
 
     const pedidos = await response.json();
 
-    for(let pedido of pedidos){
+    if (pedidos.length === 0) {
+        sinPedidos.textContent = "No tienes pedidos aún. ";
+        sinPedidos.innerHTML+=`<a href="http://localhost:3000">Haz clic aquí para agregar uno.</a>`;
+        return;
+    } else {
+        sinPedidos.textContent = ""; // Limpiar si había mensaje previo
+    }
+
+    for (let pedido of pedidos) {
         const fila = document.createElement("tr");
 
         const creacion = document.createElement("td");
@@ -23,23 +32,33 @@ async function obtenerMisPedidos() {
         const costo = document.createElement("td");
         costo.innerText = pedido.costo;
         const servicios = document.createElement("td");
+        const celdaCancelar = document.createElement("td");
         const cancelar = document.createElement("button");
         cancelar.innerText = "Cancelar";
+        cancelar.classList.add("cancelar-btn");
 
-        cancelar.addEventListener("click", async ()=>{
-            const response = await fetch(`http://localhost:3000/pedidos/${pedido.id_pedido}`,{
-                method:"DELETE",
-                headers:{
-                    "Authorization":localStorage.getItem("token")
+        cancelar.addEventListener("click", async () => {
+            const response = await fetch(`http://localhost:3000/pedidos/${pedido.id_pedido}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": localStorage.getItem("token")
                 }
             });
-            const mensaje = await response.json();
-            console.log(mensaje.mensaje);
-            fila.remove();
+            const datos = await response.json();
+            mensaje.textContent = datos.mensaje;
+            if (response.ok) {
+                mensaje.style.color = "green";
+                fila.remove();
+            } else {
+                mensaje.style.color = "red";
+            }
+            setTimeout(() => mensaje.textContent = "", 2000);
         });
 
+        celdaCancelar.appendChild(cancelar);
+
         const lista = document.createElement("ul");
-        pedido.servicios.forEach((servicio)=>{
+        pedido.servicios.forEach((servicio) => {
             const elemento = document.createElement("li");
             elemento.innerText = servicio;
             lista.appendChild(elemento);
@@ -51,7 +70,7 @@ async function obtenerMisPedidos() {
         fila.appendChild(servicios);
         fila.appendChild(estado);
         fila.appendChild(costo);
-        fila.appendChild(cancelar);
+        fila.appendChild(celdaCancelar);
         tabla.appendChild(fila);
     }
 }

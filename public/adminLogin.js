@@ -12,9 +12,11 @@ btnIngresar.addEventListener("click", async () => {
         body: JSON.stringify({ email: txtEmail.value.trim(), password: txtPassword.value.trim() })
     });
     const datos = await response.json();
-    if("token" in datos){
+    if (response.ok) {
         localStorage.setItem("token", datos.token);
-    }else{
-        error.innerText = datos.error;
+        window.location.href = "/verPedidos";
+    } else {
+        error.textContent = datos.error;
+        error.style.color = "red";
     }
 });

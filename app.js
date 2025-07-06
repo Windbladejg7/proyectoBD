@@ -22,7 +22,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); // servir carpeta public
 
-// ✅ Ruta corregida
+
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });

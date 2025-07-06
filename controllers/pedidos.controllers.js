@@ -51,7 +51,7 @@ export async function cancelarPedido(req, res) {
         await client.query("DELETE FROM SERVICIO_PEDIDO WHERE id_pedido=$1", [id]);
         await client.query("DELETE FROM PEDIDO WHERE id_pedido=$1", [id]);
         await client.query("COMMIT");
-        res.status(200).json({ mensaje: "Pedido cancelado" });
+        res.status(200).json({ mensaje: "✅ Pedido cancelado exitosamente" });
     } catch (error) {
         await client.query("ROLLBACK");
         res.status(404).json({ mensaje: "Error al cancelar pedido" })

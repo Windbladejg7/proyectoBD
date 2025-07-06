@@ -38,6 +38,7 @@ async function consultarPedidos() {
         const costo = document.createElement("td");
         costo.innerText = pedido.costo;
 
+        const select = document.createElement("td");
         const cambiarEstado = document.createElement("select");
         const pendiente = document.createElement("option");
         const completado = document.createElement("option");
@@ -69,6 +70,8 @@ async function consultarPedidos() {
             }
         });
 
+        select.appendChild(cambiarEstado);
+
         fila.appendChild(id);
         fila.appendChild(client);
         fila.appendChild(creacion);
@@ -76,7 +79,7 @@ async function consultarPedidos() {
         fila.appendChild(servicios);
         fila.appendChild(estado);
         fila.appendChild(costo);
-        fila.appendChild(cambiarEstado);
+        fila.appendChild(select);
         tabla.appendChild(fila);
     });
 }

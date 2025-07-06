@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Mi lavandería virtual</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./estilo.css">
+  <title>Mi lavandería virtual</title>
 </head>
+
 <body>
-<table border="1">
-  <thead>
-    <tr><th></th><th>Servicio</th><th>Precio</th></tr>
-  </thead>
-  <tbody id="tabla-servicios">
-    <!-- Aquí se insertan filas -->
-  </tbody>
-</table>
-<button id="btnEnviar">Enviar</button>
-<script src="./index.js"></script>
+  <main>
+    <h1>Servicios de lavandería</h1>
+    <table border="1">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Servicio</th>
+          <th>Precio</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-servicios">
+        <!-- Aquí se insertan filas -->
+      </tbody>
+    </table>
+    <button id="btnEnviar">Generar pedido</button>
+    <p id="mensaje" style="text-align:center; font-weight:bold; margin-top:1rem;"></p>
+  </main>
+  <script src="./index.js"></script>
 </body>
+
 </html>

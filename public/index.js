@@ -1,6 +1,9 @@
 const tabla = document.getElementById("tabla-servicios");
 const btnEnviar = document.getElementById("btnEnviar");
 
+const mensaje = document.getElementById("mensaje");
+
+
 //Temporal: necesito guardar el token tras el login
 /*async function login() {
     const post = await fetch('http://localhost:3000/auth/login', {
@@ -30,14 +33,30 @@ btnEnviar.addEventListener("click", async function () {
     }
 
     console.log(seleccionados);
-    await fetch("http://localhost:3000/pedidos", {
+    const response = await fetch("http://localhost:3000/pedidos", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": token //Reemplazar
+            "Authorization": token
         },
         body: JSON.stringify({ servicios: seleccionados })
     });
+
+    if (response.ok) {
+        mensaje.textContent = "✅ Pedido creado exitosamente.";
+        mensaje.style.color = "green";
+        const checkBox = document.querySelectorAll(".checks");
+        checkBox.forEach((c)=>{
+            c.checked = false;
+        });
+        const descripciones = document.querySelectorAll(".descripcion");
+        descripciones.forEach((d)=>d.remove());
+        setTimeout(()=>mensaje.textContent="", 2000);
+    } else {
+        mensaje.textContent = "❌ Hubo un error al crear el pedido.";
+        mensaje.style.color = "red";
+    }
+
 });
 
 //Para servicios
@@ -54,6 +73,7 @@ function imprimirServicios(datos) {
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
         checkBox.value = servicio.id_servicio;
+        checkBox.classList.add("checks");
 
         checkBox.addEventListener("change", function () {
             if (this.checked) {
