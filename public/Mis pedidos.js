@@ -1,6 +1,36 @@
 const tabla = document.getElementById("pedidos");
 const mensaje = document.getElementById("mensaje");
 const sinPedidos = document.getElementById("sinPedidos");
+const btnAgregar = document.getElementById("btnAgregar");
+
+btnAgregar.addEventListener("click", ()=>{
+    window.location.href = "/";
+});
+
+async function cargarInforUsuario() {
+    try {
+        const response = await fetch("/cliente", {
+            headers: {
+                "Authorization": localStorage.getItem("token")
+            }
+        });
+
+        if (!response.ok) {
+            username.textContent = "Iniciar Sesión";
+            username.parentNode.href = "/login";
+            return;
+        }
+        const usuario = await response.json();
+        username.textContent = usuario.nombre;
+    } catch (error) {
+        console.error("Error al cargar la información del usuario:", error);
+        username.textContent = "Iniciar Sesión";
+        username.parentNode.href = "/login";
+    }
+}
+
+cargarInforUsuario();
+
 
 async function obtenerMisPedidos() {
     const response = await fetch("/pedidos", {
@@ -11,14 +41,6 @@ async function obtenerMisPedidos() {
     });
 
     const pedidos = await response.json();
-
-    if (pedidos.length === 0) {
-        sinPedidos.textContent = "No tienes pedidos aún. ";
-        sinPedidos.innerHTML+=`<a href="/">Haz clic aquí para agregar uno.</a>`;
-        return;
-    } else {
-        sinPedidos.textContent = ""; // Limpiar si había mensaje previo
-    }
 
     for (let pedido of pedidos) {
         const fila = document.createElement("tr");

@@ -11,9 +11,9 @@ export async function getClientes(req, res) {
 }
 
 export async function obtenerUsuario(req, res) {
-    const { id } = req.usuario;
+    const { email } = req.usuario;
 
-    const result = await pool.query("SELECT nombres ||' '|| apellidos AS nombre FROM CLIENTE WHERE id_cliente = $1", [id]);
+    const result = await pool.query("SELECT nombres ||' '|| apellidos AS nombre FROM CLIENTE WHERE email = $1", [email]);
     if (result.rows.length === 0) return res.sendStatus(404);
     res.json(result.rows[0]);
 

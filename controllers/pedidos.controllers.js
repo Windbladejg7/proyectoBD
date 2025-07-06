@@ -26,8 +26,8 @@ export async function agregarPedido(req, res) {
 }
 
 export async function obtenerPedidosDeUsuario(req, res) {
-    const id_cliente = req.usuario.id;
-    const result = await pool.query("SELECT * FROM pedidos_completos WHERE id_cliente=$1", [id_cliente]);
+    const email = req.usuario.email;
+    const result = await pool.query("SELECT * FROM pedidos_completos WHERE email=$1", [email]);
     res.json(result.rows);
 }
 

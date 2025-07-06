@@ -81,6 +81,7 @@ SELECT
   c.nombres || ' ' || c.apellidos AS cliente,
   TO_CHAR(p.fecha_creacion, 'YYYY-MM-DD') AS fecha_creacion,
   TO_CHAR(p.fecha_entrega, 'YYYY-MM-DD') AS fecha_entrega,
+  c.email,
   e.nombre AS estado,
   SUM(s.precio) AS costo,
   JSON_AGG(s.nombre) AS servicios
@@ -89,5 +90,5 @@ INNER JOIN SERVICIO_PEDIDO ps ON ps.id_pedido = p.id_pedido
 INNER JOIN SERVICIO s ON s.id_servicio = ps.id_servicio
 INNER JOIN CLIENTE c ON c.id_cliente = p.id_cliente
 INNER JOIN ESTADO e ON e.id_estado = p.estado
-GROUP BY p.id_pedido, c.nombres, c.apellidos, p.fecha_creacion, p.fecha_entrega, e.nombre
+GROUP BY p.id_pedido, c.nombres, c.apellidos, c.email, p.fecha_creacion, p.fecha_entrega, e.nombre
 ORDER BY p.id_pedido;

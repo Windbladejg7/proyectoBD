@@ -7,7 +7,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f3f6f9;
-  padding: 2rem;
+
 }
 
 /* Título opcional */
@@ -77,4 +77,56 @@ td ul li {
 td:last-child {
   text-align: center;
   vertical-align: middle;
+}
+
+nav {
+  background-color: #4a90e2; /* Azul moderno */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end; /* Alinea a la derecha */
+  align-items: center;
+  color: white;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#username {
+  font-size: 16px;
+  border-left:1px solid white ;
+}
+
+nav ul{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+nav ul li{
+  padding: 5px 20px;
+  list-style: none;
+  font-weight: bold;
+}
+
+a {
+  color:white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#btnAgregar {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: cornflowerblue;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#btnAgregar:hover {
+  background-color: #4169e1;
 }
